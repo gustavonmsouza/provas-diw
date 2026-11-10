@@ -27,7 +27,7 @@ O objetivo é documentar a evolução prática dos conhecimentos em desenvolvime
 | Avaliação | Descrição | Status |
 |:---:|---|:---:|
 | [AV1](./AV1/) | Primeira avaliação prática de DIW | Concluída |
-| AV2 | Segunda avaliação prática de DIW | Em breve |
+| AV2 | [AV2](./AV2/VotacaoFazenda/) | Sistema de votação — A Fazenda 2026 | Concluída |
 | AV3 | Próximas atividades e avaliações | Em breve |
 
 ## 🛠️ Tecnologias
@@ -54,6 +54,19 @@ provas-diw/
 │   └── README.md
 │
 ├── AV2/
+│   ├── AV2_DIW.pdf
+│   └── VotacaoFazenda/
+│       ├── public/
+│       │   ├── index.html
+│       │   ├── votacao.html
+│       │   ├── resultado.html
+│       │   ├── css/
+│       │   ├── js/
+│       │   └── img/
+│       ├── db.json
+│       ├── package.json
+│       ├── package-lock.json
+│       └── README.md
 │
 └── README.md
 ```
