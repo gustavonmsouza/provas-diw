@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votação - A Fazenda 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo-fazenda.jpg" alt="logo galinha" height="45">
+                <span>A Fazenda 2026</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="votacao.html">Votar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resultado.html">Resultado</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <h1>Quem você quer eliminar?</h1>
+        <p>Escolha um participante da roça para votar.</p>
+
+        <div id="alertas"></div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="listaRoca"></div>
+
+        <h2 class="mt-5">Demais peões</h2>
+        <div class="row row-cols-2 row-cols-md-4 g-4" id="listaDemais"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        async function carregarVotacao() {
+            const roca = await buscarParticipantes(true);
+            const demais = await buscarParticipantes(false);
+
+            const listaRoca = document.getElementById("listaRoca");
+            const listaDemais = document.getElementById("listaDemais");
+
+            listaRoca.innerHTML = "";
+            listaDemais.innerHTML = "";
+
+            roca.forEach(p => {
+                listaRoca.innerHTML += `
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="${p.foto}" class="card-img-top" alt="${p.nome}">
+                            <div class="card-body">
+                                <h5 class="card-title">${p.nome}</h5>
+                                <span class="badge bg-danger mb-3">Na roça</span>
+                                <button class="btn btn-danger w-100" onclick="votar(${p.id}, '${p.nome}')">
+                                    Votar para eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            demais.forEach(p => {
+                listaDemais.innerHTML += `
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="${p.foto}" class="card-img-top" alt="${p.nome}">
+                            <div class="card-body">
+                                <h6>${p.nome}</h6>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        let votosUsuario = 0;
+
+        async function votar(id, nome) {
+            try {
+                await registrarVoto(id);
+
+                votosUsuario++;
+
+                document.getElementById("alertas").innerHTML = `
+            <div class="alert alert-success alert-dismissible fade show">
+                Voto registrado para ${nome}!
+
+                Você já votou ${votosUsuario} vez(es).
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+
+            } catch (erro) {
+                alert("Erro ao registrar voto.");
+            }
+        }
+
+        carregarVotacao();
+    </script>
+</body>
+
+</html>
